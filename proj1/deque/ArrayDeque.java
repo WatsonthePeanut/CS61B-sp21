@@ -1,6 +1,8 @@
 package deque;
 
-public class ArrayDeque<T> {
+import java.util.Iterator;
+
+public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     private T[] items;
     private int size;
     private int nextFirst;
@@ -28,6 +30,7 @@ public class ArrayDeque<T> {
         nextLast = size;
     }
 
+    @Override
     public void addFirst(T item) {
         if (size == items.length) {
             resize(items.length * 2);
@@ -37,6 +40,7 @@ public class ArrayDeque<T> {
         size += 1;
     }
 
+    @Override
     public void addLast(T item) {
         if (size == items.length) {
             resize(items.length * 2);
@@ -46,6 +50,7 @@ public class ArrayDeque<T> {
         size += 1;
     }
 
+    @Override
     public T removeFirst() {
         if (isEmpty()) {
             return null;
@@ -60,6 +65,7 @@ public class ArrayDeque<T> {
         return removedItem;
     }
 
+    @Override
     public T removeLast() {
         if (isEmpty()) {
             return null;
@@ -74,14 +80,12 @@ public class ArrayDeque<T> {
         return removedItem;
     }
 
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
+    @Override
     public int size() {
         return size;
     }
 
+    @Override
     public void printDeque() {
         for (int i = 0; i < size; ++i) {
             System.out.print(get(i));
@@ -93,10 +97,62 @@ public class ArrayDeque<T> {
     }
 
     // 处理逻辑下标与物理下标的对应
+    @Override
     public T get(int index) {
         if (index < 0 || index >= size) {
             return null;
         }
         return items[mod(nextFirst + 1 + index)];
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new ArrayDequeIterator();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o instanceof ArrayDeque) {
+            ArrayDeque<T> otherAD = (ArrayDeque<T>) o;
+            if (size != otherAD.size) {
+                return false;
+            }
+            for (int i = 0; i < size; ++i) {
+                T a = get(i);
+                T b = otherAD.get(i);
+                if (a == null) {        // 确保处理 null 值
+                    if (b != null) {
+                        return false;
+                    }
+                } else if (!a.equals(b)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private class ArrayDequeIterator implements Iterator<T> {
+        private int index;
+
+        public ArrayDequeIterator() {
+            index = 0;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return index < size;
+        }
+
+        @Override
+        public T next() {
+            T returnVal = get(index);
+            index += 1;
+            return returnVal;
+        }
     }
 }
