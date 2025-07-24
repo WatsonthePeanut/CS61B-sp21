@@ -115,14 +115,14 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         if (this == o) {
             return true;
         }
-        if (o instanceof ArrayDeque) {
-            ArrayDeque<T> otherAD = (ArrayDeque<T>) o;
-            if (size != otherAD.size) {
+        if (o instanceof Deque) {
+            Deque<T> otherDeque = (Deque<T>) o;
+            if (size != otherDeque.size()) {
                 return false;
             }
             for (int i = 0; i < size; ++i) {
                 T a = get(i);
-                T b = otherAD.get(i);
+                T b = otherDeque.get(i);
                 if (a == null) {        // 确保处理 null 值
                     if (b != null) {
                         return false;
@@ -139,7 +139,7 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     private class ArrayDequeIterator implements Iterator<T> {
         private int index;
 
-        public ArrayDequeIterator() {
+        ArrayDequeIterator() {
             index = 0;
         }
 

@@ -17,13 +17,6 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
     private int size;
     private Node sentinel;
 
-    public LinkedListDeque(T item) {
-        size = 1;
-        sentinel = new Node(null, null, null);
-        sentinel.next = new Node(sentinel, item, sentinel);
-        sentinel.prev = sentinel.next;
-    }
-
     public LinkedListDeque() {
         size = 0;
         sentinel = new Node(null, null, null);
@@ -127,14 +120,14 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
         if (this == o) {
             return true;
         }
-        if (o instanceof LinkedListDeque) {
-            LinkedListDeque<T> otherLLD = (LinkedListDeque<T>) o;
-            if (size != otherLLD.size) {
+        if (o instanceof Deque) {
+            Deque<T> otherDeque = (Deque<T>) o;
+            if (size != otherDeque.size()) {
                 return false;
             }
             for (int i = 0; i < size; ++i) {
                 T a = get(i);
-                T b = otherLLD.get(i);
+                T b = otherDeque.get(i);
                 if (a == null) {        // 确保处理 null 值
                     if (b != null) {
                         return false;
@@ -151,7 +144,7 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
     private class LinkedListDequeIterator implements Iterator<T> {
         private Node p;
 
-        public LinkedListDequeIterator() {
+        LinkedListDequeIterator() {
             p = sentinel.next;
         }
 
